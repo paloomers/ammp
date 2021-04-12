@@ -24,14 +24,13 @@ def parse_args():
 
 
 def main():
-    args = parse_args()
-
-    imagePath = args.video
+    # args = parse_args()
+    # imagePath = args.video
     casPath = "haarcascade_frontalface_default.xml"
+    # faces = code.video_facial_recognition(args.video, args.cascade)
 
-
-    faces = code.video_facial_recognition(args.video, args.cascade)
-
+    INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
+    faces = code.video_facial_recognition(INPUT_FILE_NAME,casPath)
 
 
 if __name__ == '__main__':
