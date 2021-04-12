@@ -3,45 +3,72 @@ import cv2
 import time
 import imutils # pip install imutils
 
-# TODO: 
-# May use this to playback videos at the end after all is done:
-# https://stackoverflow.com/questions/7227162/way-to-play-video-files-in-tkinter
+import crop_img
 
-# Not sure if video codec for writing/creating video also works on MAC right now
+# TODO: Not sure if video codec for writing/creating video also works on MAC right now
 
-# Processes frame from orig video to create frame for new video
+# just flips a video for testing right now
 def process_frame(frame):
-    # TODO: Centering Window Based on coords
     return cv2.flip(frame,0)
 
 # Plays input video, creates and saves new video
-def process_video(INPUT, OUTPUT):
+def process_video(INPUT, OUTPUT, casPath, output_scale):
+
+    faceCascade = cv2.CascadeClassifier(casPath)
     cap = cv2.VideoCapture(INPUT)
+
     if(cap.isOpened() == False):
         print("Error opening video")
     
-    print("Playing Input Video, and Creating Output")
+    print("Processing Video and Creating Output")
 
     input_width = int(cap.get(3))
     input_height = int(cap.get(4))
     frame_rate = cap.get(5)
 
+    
+    output_width = int(input_width * output_scale)
+    output_height = int(input_height * output_scale)
+
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
-    out = cv2.VideoWriter(OUTPUT,fourcc,frame_rate, (input_width,input_height))
+    out = cv2.VideoWriter(OUTPUT,fourcc,frame_rate, (output_width,output_height))
 
     while(cap.isOpened()):
         ret, frame = cap.read()
         
         if ret==True:
-            # frame = imutils.resize(frame,height=640)
 
-            new_frame = process_frame(frame)
-            # write the flipped frame
+            # FACE RECOGNITION CODE
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+            faces = faceCascade.detectMultiScale(
+                gray,
+                scaleFactor=1.1,
+                minNeighbors=5,
+                minSize=(30, 30)
+            )
+
+            # TODO: Deal w/ multiple faces found + no face found in current frame
+            # I just grabbed the first face in the thing for now
+            if(len(faces) != 0):
+                x_1,y_1,w_1,h_1 = faces[0]
+
+            # Processes a new frame for the output video
+            # new_frame = process_frame(frame)
+            new_frame = crop_img.crop_around_bounding_box(
+                frame, x_1, y_1, w_1, h_1 ,output_width,output_height
+            )
+
+            # Draw a rectangle around the faces
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+            # write the new frame
             out.write(new_frame)
 
-            # Display frame
-            cv2.imshow('input-video',frame)
+            # Display tracking info frame
+            cv2.imshow('tracking',frame)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 # May add a separate key for starting real-time video capture
@@ -55,13 +82,14 @@ def process_video(INPUT, OUTPUT):
     out.release()
     cv2.destroyAllWindows()
 
-# Plays Output File
-def play_output(OUTPUT):
-    cap = cv2.VideoCapture(OUTPUT)
+# Plays Video File
+# TODO: plays back at weird speed, but saves correctly
+def play_video(FILENAME):
+    cap = cv2.VideoCapture(FILENAME)
     if(cap.isOpened() == False):
         print("Error opening output video")
     
-    print("Playing " + OUTPUT)
+    print("Playing " + FILENAME)
     frame_rate = cap.get(5)
 
     while(cap.isOpened()):
@@ -71,9 +99,9 @@ def play_output(OUTPUT):
             break
 
         # Display frame
-        cv2.imshow('output-video',frame)
+        cv2.imshow(FILENAME,frame)
             
-        if cv2.waitKey(2) & 0xFF == ord('q'):
+        if cv2.waitKey(10) & 0xFF == ord('q'):
             print("Exited using 'q'")
             break
 
@@ -81,15 +109,3 @@ def play_output(OUTPUT):
     cap.release()
     
     cv2.destroyAllWindows()
-
-def main():
-    # File Path for saved videos, Ints for camera index (0 for 1st camera)
-    INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
-    # INPUT_FILE_NAME = 0 
-    OUTPUT_FILE_NAME = "output.avi"
-    
-    process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME)
-    play_output(OUTPUT_FILE_NAME)
-
-if __name__ == '__main__':
-    main()

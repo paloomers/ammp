@@ -3,6 +3,7 @@ import os
 from skimage import io
 import numpy as np
 
+import stabilize
 import code
 
 
@@ -30,8 +31,18 @@ def main():
     # faces = code.video_facial_recognition(args.video, args.cascade)
 
     INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
-    faces = code.video_facial_recognition(INPUT_FILE_NAME,casPath)
+    OUTPUT_FILE_NAME = "output.avi"
+    # Scale for size of output video relative to input video
+    output_scale = 0.75
 
+    # TODO: Handle webcam w different function that records and saves as a file, can also use keys to start and stop
+    
+    # Plays Input Video
+    stabilize.play_video(INPUT_FILE_NAME)
+    # Processes Video, and Generates Output Video
+    stabilize.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
+    # Plays Output Video
+    stabilize.play_video(OUTPUT_FILE_NAME)
 
 if __name__ == '__main__':
     main()
