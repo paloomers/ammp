@@ -23,7 +23,6 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
     input_width = int(cap.get(3))
     input_height = int(cap.get(4))
     frame_rate = cap.get(5)
-
     
     output_width = int(input_width * output_scale)
     output_height = int(input_height * output_scale)

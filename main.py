@@ -29,9 +29,13 @@ def record_video(cam_number):
     recorded_video_name = "./videos/recorded.avi"
 
     # video length in seconds
-    video_length = 3
+    video_length = 2
 
     cap = cv2.VideoCapture(cam_number)
+
+    # Changing camera capture resolution from default
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH,1280)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT,720)
 
     cam_width = int(cap.get(3))
     cam_height = int(cap.get(4))
@@ -78,11 +82,11 @@ def main():
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
 
-    INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
-    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    # INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
+    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
     OUTPUT_FILE_NAME = "output.avi"
     # Scale for size of output video relative to input video
-    output_scale = 0.5
+    output_scale = 0.6
 
     # Check if INPUT_FILE_NAME is int
     try:
