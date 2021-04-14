@@ -69,7 +69,8 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
             out.write(new_frame)
 
             # Display tracking info frame
-            cv2.imshow('tracking',frame)
+            cv2.namedWindow('tracking', cv2.WINDOW_NORMAL)
+            cv2.imshow('tracking', frame)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 # May add a separate key for starting real-time video capture
@@ -99,7 +100,8 @@ def play_video(FILENAME):
             break
 
         # Display frame
-        cv2.imshow(FILENAME,frame)
+        cv2.namedWindow(FILENAME, cv2.WINDOW_NORMAL)
+        cv2.imshow(FILENAME, frame)
             
         if cv2.waitKey(10) & 0xFF == ord('q'):
             print("Exited using 'q'")

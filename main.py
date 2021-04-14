@@ -46,10 +46,11 @@ def record_video(cam_number):
 
     while(cap.isOpened()):
         ret, frame = cap.read()
-        if ret==True:
-            
+        if ret==True:   
 
-            cv2.imshow('camera-input',frame)
+            cv2.namedWindow('camera-input', cv2.WINDOW_NORMAL)
+            cv2.imshow('camera-input', frame)
+
             if (cv2.waitKey(1) & 0xFF == ord('s')) and (not video_started):
                 print("Recording Started")
                 video_started = True
@@ -77,8 +78,8 @@ def main():
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
 
-    # INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
-    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
+    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
     OUTPUT_FILE_NAME = "output.avi"
     # Scale for size of output video relative to input video
     output_scale = 0.5
