@@ -5,8 +5,6 @@ import imutils # pip install imutils
 
 import crop_img
 
-# TODO: Not sure if video codec for writing/creating video also works on MAC right now
-
 # just flips a video for testing right now
 def process_frame(frame):
     return cv2.flip(frame,0)
@@ -33,6 +31,9 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
     out = cv2.VideoWriter(OUTPUT,fourcc,frame_rate, (output_width,output_height))
+    
+    # Ignore this (used to avoid errors if nothing found)
+    x_1,y_1,w_1,h_1 = (100,100,input_width/4,input_height/4)
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -83,7 +84,6 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
     cv2.destroyAllWindows()
 
 # Plays Video File
-# TODO: plays back at weird speed, but saves correctly
 def play_video(FILENAME):
     cap = cv2.VideoCapture(FILENAME)
     if(cap.isOpened() == False):
@@ -107,5 +107,4 @@ def play_video(FILENAME):
 
     # Release everything if job is finished
     cap.release()
-    
     cv2.destroyAllWindows()
