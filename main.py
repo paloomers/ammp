@@ -5,6 +5,8 @@ import numpy as np
 import cv2
 
 import stabilize
+import optical
+import cascade
 import code
 import time
 
@@ -29,7 +31,7 @@ def record_video(cam_number):
     recorded_video_name = "./videos/recorded.mp4"
 
     # video length in seconds
-    video_length = 10
+    video_length = 3
 
     cap = cv2.VideoCapture(cam_number)
 
@@ -83,12 +85,14 @@ def main():
     # imagePath = args.video
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
-
-    INPUT_FILE_NAME = "./videos/bball-dribble.avi"
-    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
-    OUTPUT_FILE_NAME = "output.mp4"
+    # INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
+    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    OUTPUT_FILE_NAME = "output.avi"
     # Scale for size of output video relative to input video
-    output_scale = 0.5
+    output_scale = 0.7
+
+    # method = "optical"
+    method = "cascade"
 
     # Check if INPUT_FILE_NAME is int
     try:
@@ -99,12 +103,25 @@ def main():
     except ValueError:
         INPUT_FILE_NAME = INPUT_FILE_NAME
 
-    # Plays Input Video
-    stabilize.play_video(INPUT_FILE_NAME)
-    # Processes Video, and Generates Output Video
-    stabilize.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
-    # Plays Output Video
-    stabilize.play_video(OUTPUT_FILE_NAME)
+    if (method == "optical"):
+        # Plays Input Video
+        optical.play_video(INPUT_FILE_NAME)
+        # Processes Video, and Generates Output Video
+        optical.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
+        # Plays Output Video
+        optical.play_video(OUTPUT_FILE_NAME)
+
+    elif (method == "cascade"):
+        # Plays Input Video
+        cascade.play_video(INPUT_FILE_NAME)
+        # Processes Video, and Generates Output Video
+        cascade.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
+        # Plays Output Video
+        cascade.play_video(OUTPUT_FILE_NAME)
+    else:
+        print("method not supported")
+
+    
 
 if __name__ == '__main__':
     main()
