@@ -34,6 +34,7 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
     # Ignore this (used to avoid errors if nothing found)
     x_1,y_1,w_1,h_1 = (100,100,input_width/4,input_height/4)
 
+    i = 0
     while(cap.isOpened()):
         ret, frame = cap.read()
         
@@ -50,20 +51,37 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
             )
 
             # TODO: Deal w/ multiple faces found + no face found in current frame
-            # I just grabbed the first face in the thing for now
+            #if faces are detected:
             if(len(faces) != 0):
-                x_1,y_1,w_1,h_1 = faces[0]
+                #if this is the first frame or there's only one face, return the first face
+                if(i==0 or len(faces) == 1):
+                    x_1,y_1,w_1,h_1 = faces[0]
+                    x_0, y_0 = x_1,y_1
+                
+                # otherwise return the face closest to the previous face
+                else:
+                    min_dist = 10000
+                    for (x, y, w, h) in faces:
+                        #calculates distance between previous face and current face
+                        dist = np.linalg.norm(np.array((x ,y)) - np.array((x_0,y_0)))
+                        #if min distance, saves this face
+                        if(dist < min_dist):
+                           x_1, y_1, w_1, h_1 =  x, y, w, h
+                           min_dist = dist
+            #saves current face as previous face
+            x_0, y_0 = x_1, y_1
+            i = 1
 
+            
             # Processes a new frame for the output video
             # new_frame = process_frame(frame)
             new_frame = crop_img.crop_around_bounding_box(
                 frame, x_1, y_1, w_1, h_1 ,output_width,output_height
             )
 
-            # Draw a rectangle around the faces
-            for (x, y, w, h) in faces:
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-
+            # Draw a rectangle around the face
+            cv2.rectangle(frame, (x_1, y_1), (x_1+w_1, y_1+h_1), (0, 255, 0), 2)
+                
             # write the new frame
             out.write(new_frame)
 
