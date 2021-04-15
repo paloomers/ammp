@@ -84,9 +84,9 @@ def main():
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
 
-    INPUT_FILE_NAME = "./videos/bball-dribble.avi"
-    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
-    OUTPUT_FILE_NAME = "output.mp4"
+    # INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
+    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    OUTPUT_FILE_NAME = "output.avi"
     # Scale for size of output video relative to input video
     output_scale = 0.5
 

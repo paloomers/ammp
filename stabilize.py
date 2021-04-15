@@ -4,6 +4,7 @@ import time
 import imutils # pip install imutils
 
 import crop_img
+import lazy_motion
 
 # just flips a video for testing right now
 def process_frame(frame):
@@ -30,6 +31,10 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
     out = cv2.VideoWriter(OUTPUT,fourcc,frame_rate, (output_width,output_height))
+
+
+    # for motion stuff
+    x_0,y_0,w_0,h_0 = (100,100,input_width/4,input_height/4)
     
     # Ignore this (used to avoid errors if nothing found)
     x_1,y_1,w_1,h_1 = (100,100,input_width/4,input_height/4)
@@ -52,7 +57,15 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
             # TODO: Deal w/ multiple faces found + no face found in current frame
             # I just grabbed the first face in the thing for now
             if(len(faces) != 0):
+                x_0,y_0,w_0,h_0 = x_1,y_1,w_1,h_1
                 x_1,y_1,w_1,h_1 = faces[0]
+            else:
+                old_center_x, old_center_y = lazy_motion.find_center(x_0,y_0,w_0,h_0)
+                new_center_x, new_center_y = lazy_motion.find_center(x_1,y_1,w_1,h_1)
+                predict_x, predict_y = lazy_motion.calc_center_linear(old_center_x, old_center_y, new_center_x, new_center_y)
+                x_0,y_0,w_0,h_0 = x_1,y_1,w_1,h_1
+                x_1,y_1,w_1,h_1 = lazy_motion.top_left_from_center(predict_x, predict_y, w_1, h_1)
+
 
             # Processes a new frame for the output video
             # new_frame = process_frame(frame)
