@@ -26,10 +26,10 @@ def parse_args():
 
 def record_video(cam_number):
     print("Recording Video From Camera")
-    recorded_video_name = "./videos/recorded.avi"
+    recorded_video_name = "./videos/recorded.mp4"
 
     # video length in seconds
-    video_length = 2
+    video_length = 10
 
     cap = cv2.VideoCapture(cam_number)
 
@@ -42,11 +42,12 @@ def record_video(cam_number):
     frame_rate = cap.get(5)
 
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(recorded_video_name,fourcc,frame_rate,(cam_width,cam_height))
 
     video_started = False
-    start_time = None
+    max_num_frames = video_length * int(frame_rate)
+    num_frames_captured = 0
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -58,16 +59,17 @@ def record_video(cam_number):
             if (cv2.waitKey(1) & 0xFF == ord('s')) and (not video_started):
                 print("Recording Started")
                 video_started = True
-                start_time = time.time()
             
             if(video_started):
-                # write the frame
-                out.write(frame)
-                elapsed_time = time.time() - start_time
-                if(elapsed_time > video_length):
+                if (num_frames_captured < max_num_frames):
+                    # write the frame
+                    out.write(frame)
+                    num_frames_captured += 1
+                else:
                     break
         else:
             break
+
 
     # Release everything if job is finished
     cap.release()
@@ -82,11 +84,11 @@ def main():
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
 
-    # INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
-    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
-    OUTPUT_FILE_NAME = "output.avi"
+    INPUT_FILE_NAME = "./videos/bball-dribble.avi"
+    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    OUTPUT_FILE_NAME = "output.mp4"
     # Scale for size of output video relative to input video
-    output_scale = 0.6
+    output_scale = 0.5
 
     # Check if INPUT_FILE_NAME is int
     try:
