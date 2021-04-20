@@ -92,7 +92,7 @@ def main():
     output_scale = 0.7
 
     # method = "optical"
-    method = "cascade"
+    method = "lol"
 
     # Check if INPUT_FILE_NAME is int
     try:
