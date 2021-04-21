@@ -5,14 +5,29 @@ import imutils # pip install imutils
 
 import crop_img
 
+x_0 = 900
+y_0 = 500
+
 # just flips a video for testing right now
 def process_frame(frame):
     return cv2.flip(frame,0)
 
-# Plays input video, creates and saves new video
-def process_video(INPUT, OUTPUT, casPath, output_scale):
+# when clicking a point on the screen, set it to be the tracked point
+# i should add a boolean to make sure this is during being clicked later
+def select_point(event, x, y, flags, params):
+    global x_0, y_0
+    if event == cv2.EVENT_LBUTTONDOWN:
+        x_0 = x
+        y_0 = y
+        # cv2.circle(frame, point, 5, (0, 0, 255), 2)
+        cv2.destroyWindow('point_selector')
 
-    faceCascade = cv2.CascadeClassifier(casPath)
+
+
+# Plays input video, creates and saves new video
+def process_video(INPUT, OUTPUT, output_scale):
+    global x_0, y_0
+
     cap = cv2.VideoCapture(INPUT)
 
     if(cap.isOpened() == False):
@@ -30,60 +45,52 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc('M','J','P','G')
     out = cv2.VideoWriter(OUTPUT,fourcc,frame_rate, (output_width,output_height))
+
+    # config for opencv optical flow
+    lk_params = dict(winSize=(15,15), maxLevel=4, criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+
     
-    # Ignore this (used to avoid errors if nothing found)
-    x_1,y_1,w_1,h_1 = (100,100,input_width/4,input_height/4)
+    # starting coords TODO: replace w/ click on video
 
     i = 0
+    ret, prev_frame = cap.read()
+
+    # show the first frame
+    cv2.namedWindow('point_selector')
+    cv2.setMouseCallback('point_selector', select_point)
+    cv2.imshow('point_selector', prev_frame)
+    key = cv2.waitKey(10000) #change to your own waiting time 1000 = 1 second 
+
+
+    old_coords = np.array([[x_0, y_0]], dtype=np.float32)
+
+    prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
     while(cap.isOpened()):
+        # TODO: display first frame and ask user to pick a point
+
         ret, frame = cap.read()
+        gray_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
         
         if ret==True:
 
-            # FACE RECOGNITION CODE
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            new_points, status, error = cv2.calcOpticalFlowPyrLK(prev_gray, gray_frame, old_coords, None, **lk_params)
+            x_0, y_0 = new_points.ravel()
+            old_coords = new_points
 
-            faces = faceCascade.detectMultiScale(
-                gray,
-                scaleFactor=1.1,
-                minNeighbors=5,
-                minSize=(30, 30)
-            )
-
-            # TODO: Deal w/ multiple faces found + no face found in current frame
-            #if faces are detected:
-            if(len(faces) != 0):
-                #if this is the first frame or there's only one face, return the first face
-                if(i==0 or len(faces) == 1):
-                    x_1,y_1,w_1,h_1 = faces[0]
-                    x_0, y_0 = x_1,y_1
-                
-                # otherwise return the face closest to the previous face
-                else:
-                    min_dist = 10000
-                    for (x, y, w, h) in faces:
-                        #calculates distance between previous face and current face
-                        dist = np.linalg.norm(np.array((x ,y)) - np.array((x_0,y_0)))
-                        #if min distance, saves this face
-                        if(dist < min_dist):
-                           x_1, y_1, w_1, h_1 =  x, y, w, h
-                           min_dist = dist
-            #saves current face as previous face
-            x_0, y_0 = x_1, y_1
-            i = 1
-
-            
             # Processes a new frame for the output video
             # new_frame = process_frame(frame)
-            new_frame = crop_img.crop_around_bounding_box(
-                frame, x_1, y_1, w_1, h_1 ,output_width,output_height
+            new_frame = crop_img.crop_around_point(
+                frame, x_0, y_0,output_width,output_height
             )
 
-            # Draw a rectangle around the face
-            cv2.rectangle(frame, (x_1, y_1), (x_1+w_1, y_1+h_1), (0, 255, 0), 2)
+            # TODO: draw a dot on the point being tracked
+            cv2.circle(frame, (x_0, y_0), 5, (0, 255, 0), -1)
                 
             # write the new frame
             out.write(new_frame)
+
+            prev_frame = frame
+            prev_gray = gray_frame
 
             # Display tracking info frame
             cv2.namedWindow('tracking', cv2.WINDOW_NORMAL)

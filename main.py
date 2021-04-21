@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument(
         '--video',
         required=True,
-        help='Which video to use')
+        =lp='Which video to use')
     parser.add_argument(
         '--cascade',
         required=True,
@@ -116,7 +116,7 @@ def main():
         cascade.play_video(INPUT_FILE_NAME)
         # Processes Video, and Generates Output Video
         cascade.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
-        # Plays Output Video
+        # Plays Output Videoo
         cascade.play_video(OUTPUT_FILE_NAME)
     else:
         print("method not supported")
