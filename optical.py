@@ -56,7 +56,7 @@ def process_video(INPUT, OUTPUT, output_scale):
     ret, prev_frame = cap.read()
 
     # show the first frame
-    cv2.namedWindow('point_selector')
+    cv2.namedWindow('point_selector',cv2.WINDOW_NORMAL)
     cv2.setMouseCallback('point_selector', select_point)
     cv2.imshow('point_selector', prev_frame)
     key = cv2.waitKey(10000) #change to your own waiting time 1000 = 1 second 

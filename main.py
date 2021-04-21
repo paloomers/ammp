@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument(
         '--video',
         required=True,
-        =lp='Which video to use')
+        lp='Which video to use')
     parser.add_argument(
         '--cascade',
         required=True,
@@ -105,9 +105,9 @@ def main():
 
     if (method == "optical"):
         # Plays Input Video
-        optical.play_video(INPUT_FILE_NAME)
+        # optical.play_video(INPUT_FILE_NAME)
         # Processes Video, and Generates Output Video
-        optical.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
+        optical.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,output_scale)
         # Plays Output Video
         optical.play_video(OUTPUT_FILE_NAME)
 
