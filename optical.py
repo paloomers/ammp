@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import time
 import imutils # pip install imutils
-
+import my_optical
 import crop_img
 
 x_0 = 900
@@ -73,7 +73,12 @@ def process_video(INPUT, OUTPUT, output_scale):
         
         if ret==True:
 
-            new_points, status, error = cv2.calcOpticalFlowPyrLK(prev_gray, gray_frame, old_coords, None, **lk_params)
+            # OPENCV Built-in OF
+            # new_points, status, error = cv2.calcOpticalFlowPyrLK(prev_gray, gray_frame, old_coords, None, **lk_params)
+            # Using our implementation
+            window_size = 15 # window size for custom OF
+            new_points = my_optical.my_optical_flow(prev_gray,gray_frame,old_coords[0,0],old_coords[0,1],window_size)
+            
             x_0, y_0 = new_points.ravel()
             old_coords = new_points
 

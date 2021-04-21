@@ -85,14 +85,14 @@ def main():
     # imagePath = args.video
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
-    # INPUT_FILE_NAME = "./videos/bball-dribble.mp4"
-    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    INPUT_FILE_NAME = "./videos/v1-airpod.mp4"
+    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
     OUTPUT_FILE_NAME = "output.avi"
     # Scale for size of output video relative to input video
     output_scale = 0.7
 
-    # method = "optical"
-    method = "lol"
+    method = "optical"
+    # method = "cascade"
 
     # Check if INPUT_FILE_NAME is int
     try:
@@ -116,7 +116,7 @@ def main():
         cascade.play_video(INPUT_FILE_NAME)
         # Processes Video, and Generates Output Video
         cascade.process_video(INPUT_FILE_NAME,OUTPUT_FILE_NAME,casPath,output_scale)
-        # Plays Output Videoo
+        # Plays Output Video
         cascade.play_video(OUTPUT_FILE_NAME)
     else:
         print("method not supported")
