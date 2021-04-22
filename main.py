@@ -10,21 +10,21 @@ import cascade
 import code
 import time
 
-def parse_args():
-    """ Perform command-line argument parsing. """
+# def parse_args():
+#     """ Perform command-line argument parsing. """
 
-    parser = argparse.ArgumentParser(
-        description="Project 6 Final Project!")
-    parser.add_argument(
-        '--video',
-        required=True,
-        lp='Which video to use')
-    parser.add_argument(
-        '--cascade',
-        required=True,
-        help='Cascade used to find object')
+#     parser = argparse.ArgumentParser(
+#         description="Project 6 Final Project!")
+#     parser.add_argument(
+#         '--video',
+#         required=True,
+#         lp='Which video to use')
+#     parser.add_argument(
+#         '--cascade',
+#         required=True,
+#         help='Cascade used to find object')
 
-    return parser.parse_args()
+#     return parser.parse_args()
 
 def record_video(cam_number):
     print("Recording Video From Camera")
@@ -83,16 +83,20 @@ def record_video(cam_number):
 def main():
     # args = parse_args()
     # imagePath = args.video
+
     casPath = "haarcascade_frontalface_default.xml"
     # faces = code.video_facial_recognition(args.video, args.cascade)
+    
     INPUT_FILE_NAME = "./videos/v1-airpod.mp4"
     # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    
     OUTPUT_FILE_NAME = "output.avi"
+
     # Scale for size of output video relative to input video
     output_scale = 0.7
 
-    method = "optical"
-    # method = "cascade"
+    # method = "optical"
+    method = "cascade"
 
     # Check if INPUT_FILE_NAME is int
     try:

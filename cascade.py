@@ -50,7 +50,7 @@ def process_video(INPUT, OUTPUT, casPath, output_scale):
                 minSize=(30, 30)
             )
 
-            # TODO: Deal w/ multiple faces found + no face found in current frame
+            # Deal w/ multiple faces found + no face found in current frame
             #if faces are detected:
             if(len(faces) != 0):
                 #if this is the first frame or there's only one face, return the first face

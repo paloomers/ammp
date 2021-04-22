@@ -22,8 +22,6 @@ def select_point(event, x, y, flags, params):
         # cv2.circle(frame, point, 5, (0, 0, 255), 2)
         cv2.destroyWindow('point_selector')
 
-
-
 # Plays input video, creates and saves new video
 def process_video(INPUT, OUTPUT, output_scale):
     global x_0, y_0
@@ -49,8 +47,6 @@ def process_video(INPUT, OUTPUT, output_scale):
     # config for opencv optical flow
     lk_params = dict(winSize=(15,15), maxLevel=4, criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
-    
-    # starting coords TODO: replace w/ click on video
 
     i = 0
     ret, prev_frame = cap.read()
@@ -66,7 +62,7 @@ def process_video(INPUT, OUTPUT, output_scale):
 
     prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
     while(cap.isOpened()):
-        # TODO: display first frame and ask user to pick a point
+        # display first frame and ask user to pick a point
 
         ret, frame = cap.read()
         gray_frame = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)
@@ -88,7 +84,7 @@ def process_video(INPUT, OUTPUT, output_scale):
                 frame, x_0, y_0,output_width,output_height
             )
 
-            # TODO: draw a dot on the point being tracked
+            # draw a dot on the point being tracked
             cv2.circle(frame, (x_0, y_0), 5, (0, 255, 0), -1)
                 
             # write the new frame
