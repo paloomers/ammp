@@ -10,6 +10,8 @@ For our project, we have implemented locked-on object stabilization using two ap
 
 INPUT_FILE_NAME and OUTPUT_FILE_NAME both represent the name and directory of the respective input and output files for the program. Using an integer string for INPUT_FILE_NAME uses a camera input to your computer (use "0" for your webcam). 
 
+Note: If using a camera input, press "s" to start recording your video. The video is recorded by default for 3 seconds, but can be changed in record_video().
+
 output_scale is a hyper-paramter for the scale of your output video relative to the scale of the input video. Lower ratios produce lower resolution videos, but tend to have less black boxes around the final output.
 
 ### Optical flow
