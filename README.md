@@ -35,6 +35,9 @@ To test the cascade without stabilization, cd into the gatheringCascade folder a
 ## Some Results
 Our other result gifs were too big to upload to github (but can be observed in our presentation recording!)
 
+Here's our presentation slides + some of the videos in the presentation:
+https://drive.google.com/drive/folders/1HuKCLsqPSqD0lqk2TGGCE4bB5G_cRAzo?usp=sharing
+
 ### Optical Flow
 The OpenCV optical flow vector outputs compared to our optical flow function outputs 
 
