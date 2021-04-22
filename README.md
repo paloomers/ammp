@@ -28,7 +28,9 @@ The window size hyper-parameter for the local window of points that is used to e
 
 What happens when you run:
 
+To run the stabilization with the AirPod cascade, in main.py uncomment the line that says method="cascade" and change the variable, cascPath, to be the relative path of the file, "cascadecopycopy.xml". Make sure INPUT_FILE_NAME = "0". Run main.py. From there, a window should display and click "s" to start recording. The video cropped around the object will play and be written to output.py
 
+To test the cascade without stabilization, cd into the gatheringCascade folder and run test.py. This will use web cam footage as the video input which the cascade will be applied to. Boxes should encase the recognized AirPod.
 
 ## Some Results
 Our other result gifs were too big to upload to github (but can be observed in our presentation recording!)
