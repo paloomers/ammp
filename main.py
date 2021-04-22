@@ -85,10 +85,10 @@ def main():
     # imagePath = args.video
 
     casPath = "haarcascade_frontalface_default.xml"
-    # faces = code.video_facial_recognition(args.video, args.cascade)
+    # casPath = "./gatheringCascade/cascadecopy.xml"
     
-    INPUT_FILE_NAME = "./videos/v1-airpod.mp4"
-    # INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
+    # INPUT_FILE_NAME = "./videos/v1-airpod.mp4"
+    INPUT_FILE_NAME = "0" # Use Integers for Camera (ex. Webcam)
     
     OUTPUT_FILE_NAME = "output.avi"
 
